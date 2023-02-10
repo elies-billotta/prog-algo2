@@ -9,53 +9,106 @@ struct Noeud{
 
 struct Liste{
     Noeud* premier;
-    // your code
 };
+
+void initialise(Liste* liste)
+{
+    liste->premier = NULL;
+}
+
+bool est_vide(const Liste* liste)
+{
+    return liste->premier == NULL;
+}
+
+void ajoute(Liste* liste, int valeur)
+{
+    cout << "coucou" << endl;
+    if (liste->premier == NULL)
+    {
+        liste->premier = new Noeud;
+        liste->premier->donnee = valeur;
+        liste->premier->suivant = NULL;
+    }
+    else {
+        Noeud *current = liste->premier;
+        while (current->suivant != NULL)
+        {
+            current = current->suivant;
+        }
+        current->suivant = new Noeud;
+        current->suivant->donnee = valeur;
+        current->suivant->suivant = NULL;
+    }
+}
+
+void affiche(const Liste* liste)
+{
+    Noeud *current = liste->premier;
+    while (current->suivant != NULL)
+    {
+        cout << current->donnee << endl;
+        current = current->suivant;
+    }
+}
+
+int recupere(const Liste* liste, int n)
+{
+    Noeud *current = liste->premier;
+    int i = 0;
+    while (current->suivant != NULL)
+    {
+        if (i == n)
+        {
+            return current->donnee;
+        }
+        current = current->suivant;
+        i++;
+    }
+    return 0;
+}
+
+int cherche(const Liste* liste, int valeur)
+{
+    Noeud *current = liste->premier;
+    int i = 0;
+    while (current->suivant != NULL)
+    {
+        if (current->donnee == valeur)
+        {
+            return i;
+        }
+        current = current->suivant;
+        i++;
+    }
+    return -1;
+}
+
+void stocke(Liste* liste, int n, int valeur)
+{
+    Noeud *current = liste->premier;
+    int i = 0;
+    while (current->suivant != NULL)
+    {
+        if (i == n)
+        {
+            current->donnee = valeur;
+        }
+        current = current->suivant;
+        i++;
+    }
+}
+
+//--------------------------------------------------- Tableau Dynamique ---------------------------------------------------
 
 struct DynaTableau{
     int* donnees;
     // your code
 };
 
-
-void initialise(Liste* liste)
-{
-
-}
-
-bool est_vide(const Liste* liste)
-{
-    return false;
-}
-
-void ajoute(Liste* liste, int valeur)
-{
-
-}
-
-void affiche(const Liste* liste)
-{
-
-}
-
-int recupere(const Liste* liste, int n)
-{
-    return 0;
-}
-
-int cherche(const Liste* liste, int valeur)
-{
-    return -1;
-}
-
-void stocke(Liste* liste, int n, int valeur)
-{
-
-}
-
 void ajoute(DynaTableau* tableau, int valeur)
 {
-
+    
 }
 
 
