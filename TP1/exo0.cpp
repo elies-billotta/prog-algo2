@@ -17,7 +17,7 @@ int sum(int n)
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);  // create a window manager
+   /* QApplication a(argc, argv);  // create a window manager
     MainWindow::instruction_duration = 400;  // make a pause between instruction display
     MainWindow* w = new SumWindow(sum); // create a window for this exercice
     w->show(); // show exercice

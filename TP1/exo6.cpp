@@ -23,7 +23,6 @@ bool est_vide(const Liste* liste)
 
 void ajoute(Liste* liste, int valeur)
 {
-    cout << "coucou" << endl;
     if (liste->premier == NULL)
     {
         liste->premier = new Noeud;

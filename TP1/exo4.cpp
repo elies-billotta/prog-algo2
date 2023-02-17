@@ -1,4 +1,4 @@
-#include "tp1.h"
+/*#include "tp1.h"
 #include <QApplication>
 #include <time.h>
 
@@ -21,6 +21,33 @@ int main(int argc, char *argv[])
     w->show(); // show exercice
 
     return a.exec(); // main loop while window is opened
+}*/
+
+#include <iostream>
+
+using namespace std;
+
+void printArray(int array[], int size){
+    for (int i=0; i<size; i++){
+        cout << array[i] << " ";
+    }
+    cout << endl;
+}
+
+int* allEvens(int evens[], int array[], int evenSize, int arraySize){
+    if (arraySize == -1) return evens;
+    if (array[arraySize]%2 == 0){
+        evens[evenSize] = array[arraySize];
+        return allEvens(evens, array, evenSize-1, arraySize-1);
+    }
+    return allEvens(evens, array, evenSize, arraySize-1);
+}
+
+int main(){
+    int evens[] = {0, 0, 0, 0, 0};
+    int array[] = {1, 2, 3, 4, 5};
+    printArray(allEvens(evens, array, 5, 5), 5);
+    return 0;
 }
 
 
