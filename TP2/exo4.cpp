@@ -1,4 +1,4 @@
-#include <QApplication>
+/*#include <QApplication>
 #include <time.h>
 
 #include "tp2.h"
@@ -35,4 +35,40 @@ int main(int argc, char *argv[])
 	w->show();
 
 	return a.exec();
+}*/
+
+using namespace std;
+
+#include <iostream>
+#include <vector>
+
+void quickSort(std::vector<int>& toSort){
+	int size = toSort.size();
+	if (size > 1){
+		int pivot = rand()%toSort.size();
+		int tab_pivot = toSort[pivot];
+		std::vector<int> lowers;
+		std::vector<int> greaters;
+		for(int i = 0 ; i < size; i++){
+			if (pivot != i){
+				if (toSort[i] < toSort[pivot]) lowers.push_back(toSort[i]); 
+				else greaters.push_back(toSort[i]);
+			}
+		}
+		quickSort(lowers);
+		quickSort(greaters);
+		toSort.clear();
+		toSort.insert(toSort.end(), lowers.begin(), lowers.end());
+		toSort.push_back(tab_pivot);
+		toSort.insert(toSort.end(), greaters.begin(), greaters.end());
+	}
+}
+
+int main(){
+	std::vector<int> toSort = {3, 2, 1, 5, 4};
+	quickSort(toSort);
+	for (int i = 0 ; i < toSort.size() ; i++){
+		std::cout << toSort[i] << std::endl;
+	}
+	return 0;
 }

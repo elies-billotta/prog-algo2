@@ -27,17 +27,23 @@ using namespace std;
 #include <iostream>
 #include <vector>
 
-vector<int> bubbleSort(std::vector<int>& toSort){
+void bubbleSort(std::vector<int>& toSort){
 	for (int i = 0 ; i < toSort.size() ; i++){
-		for (int j = 0 ;  )
+		for (int j = 0 ; j < toSort.size()-i-1 ; j++){
+			if (toSort[j] > toSort[j+1]){
+				int copy = toSort[j];
+				toSort[j] = toSort[j+1]; 
+				toSort[j+1] = copy;
+			}
+		}
 	}
 }
 
 int main(){
 	std::vector<int> toSort = {3, 2, 1, 5, 4};
-	std::vector<int> result = bubbleSort(toSort);
-	for (int i = 0 ; i < result.size() ; i++){
-		std::cout << result[i] << std::endl;
+	bubbleSort(toSort);
+	for (int i = 0 ; i < toSort.size() ; i++){
+		std::cout << toSort[i] << std::endl;
 	}
 	return 0;
 }
