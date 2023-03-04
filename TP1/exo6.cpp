@@ -102,12 +102,11 @@ void stocke(Liste* liste, int n, int valeur)
 
 struct DynaTableau{
     int* donnees;
-    // your code
 };
 
 void ajoute(DynaTableau* tableau, int valeur)
 {
-    
+
 }
 
 
@@ -118,22 +117,21 @@ void initialise(DynaTableau* tableau, int capacite)
 
 bool est_vide(const DynaTableau* liste)
 {
-    return false;
+    return liste->donnees == NULL;
 }
 
 void affiche(const DynaTableau* tableau)
 {
 
+
 }
 
 int recupere(const DynaTableau* tableau, int n)
 {
-    return 0;
 }
 
 int cherche(const DynaTableau* tableau, int valeur)
 {
-    return -1;
 }
 
 void stocke(DynaTableau* tableau, int n, int valeur)
@@ -142,27 +140,68 @@ void stocke(DynaTableau* tableau, int n, int valeur)
 }
 
 //void pousse_file(DynaTableau* liste, int valeur)
-void pousse_file(Liste* liste, int valeur)
-{
-
+void pousse_file(Liste* liste, int valeur){
+    if (liste->premier == NULL)
+    {
+        liste->premier = new Noeud;
+        liste->premier->donnee = valeur;
+        liste->premier->suivant = NULL;
+    }
+    else {
+        Noeud *current = liste->premier;
+        while (current->suivant != NULL)
+        {
+            current = current->suivant;
+        }
+        current->suivant = new Noeud;
+        current->suivant->donnee = valeur;
+        current->suivant->suivant = NULL;
+    }
 }
 
 //int retire_file(Liste* liste)
-int retire_file(Liste* liste)
-{
-    return 0;
+int retire_file(Liste* liste){
+    if (liste->premier == NULL)
+    {
+        return 0;
+    }
+    else {
+        Noeud *current = liste->premier;
+        int valeur = current->donnee;
+        liste->premier = liste->premier->suivant;
+        delete current;
+        return valeur;
+    }
 }
-
 //void pousse_pile(DynaTableau* liste, int valeur)
-void pousse_pile(Liste* liste, int valeur)
-{
-
+void pousse_pile(Liste* liste, int valeur){
+    if (liste->premier == NULL)
+    {
+        liste->premier = new Noeud;
+        liste->premier->donnee = valeur;
+        liste->premier->suivant = NULL;
+    }
+    else {
+        Noeud *current = liste->premier;
+        liste->premier = new Noeud;
+        liste->premier->donnee = valeur;
+        liste->premier->suivant = current;
+    }
 }
 
 //int retire_pile(DynaTableau* liste)
-int retire_pile(Liste* liste)
-{
-    return 0;
+int retire_pile(Liste* liste){
+    if (liste->premier == NULL)
+    {
+        return 0;
+    }
+    else {
+        Noeud *current = liste->premier;
+        int valeur = current->donnee;
+        liste->premier = liste->premier->suivant;
+        delete current;
+        return valeur;
+    }
 }
 
 
