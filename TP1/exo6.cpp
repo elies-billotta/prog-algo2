@@ -102,17 +102,35 @@ void stocke(Liste* liste, int n, int valeur)
 
 struct DynaTableau{
     int* donnees;
+    int capacite;
 };
 
 void ajoute(DynaTableau* tableau, int valeur)
 {
-
+    if (tableau->donnees == NULL)
+    {
+        tableau->donnees = new int[1];
+        tableau->donnees[0] = valeur;
+        tableau->capacite = 1;
+    }
+    else {
+        int* newTableau = new int[tableau->capacite + 1];
+        for (int i = 0; i < tableau->capacite; i++)
+        {
+            newTableau[i] = tableau->donnees[i];
+        }
+        newTableau[tableau->capacite] = valeur;
+        tableau->capacite++;
+        delete[] tableau->donnees;
+        tableau->donnees = newTableau;
+    }
 }
 
 
 void initialise(DynaTableau* tableau, int capacite)
 {
-
+    tableau->donnees = new int[capacite];
+    tableau->capacite = capacite;
 }
 
 bool est_vide(const DynaTableau* liste)
@@ -122,20 +140,30 @@ bool est_vide(const DynaTableau* liste)
 
 void affiche(const DynaTableau* tableau)
 {
-
+    for (int i = 0; i < tableau->capacite; i++)
+    {
+        cout << tableau->donnees[i] << endl;
+    }
 
 }
 
-int recupere(const DynaTableau* tableau, int n)
-{
+int recupere(const DynaTableau* tableau, int n){
+    return tableau->donnees[n];
 }
 
-int cherche(const DynaTableau* tableau, int valeur)
-{
+int cherche(const DynaTableau* tableau, int valeur){
+    for (int i = 0; i < tableau->capacite; i++)
+    {
+        if (tableau->donnees[i] == valeur)
+        {
+            return i;
+        }
+    }
+    return -1;
 }
 
-void stocke(DynaTableau* tableau, int n, int valeur)
-{
+void stocke(DynaTableau* tableau, int n, int valeur){
+    tableau->donnees[n] = valeur;
 
 }
 
@@ -190,7 +218,8 @@ void pousse_pile(Liste* liste, int valeur){
 }
 
 //int retire_pile(DynaTableau* liste)
-int retire_pile(Liste* liste){
+int retire_pile(Liste* liste)
+{
     if (liste->premier == NULL)
     {
         return 0;
