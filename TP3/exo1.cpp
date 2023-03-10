@@ -1,21 +1,25 @@
-#include "tp3.h"
-#include <QApplication>
-#include <time.h>
+#include <iostream>
+#include <vector>
 
-MainWindow* w = nullptr;
-using std::size_t;
+using namespace std;
 
-int binarySearch(Array& array, int toSearch)
-{
+int binarySearch(std::vector<int> tab, int toSearch){
+	int mid = 0;
+	int start = 0; 
+	int end = tab.size();
+	while(start < end){
+		mid = (start + end) / 2;
+		if (toSearch > tab[mid]) start = mid + 1;
+		else if (toSearch < tab[mid]) end = mid;
+		else return mid; 
+	}
 	return -1;
 }
 
-int main(int argc, char *argv[])
-{
-	QApplication a(argc, argv);
-	MainWindow::instruction_duration = 500;
-	w = new BinarySearchWindow(binarySearch);
-	w->show();
-
-	return a.exec();
+int main(){
+	std::vector<int> tab = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+	int toSearch = 10;
+	int result = binarySearch(tab, toSearch);
+	cout << "Le chiffre " << toSearch << " est à l'index : " << result << endl;
+	return 0;
 }
