@@ -12,6 +12,7 @@ using namespace std;
  */
 void binarySearchAll(std::vector<int> array, int toSearch, int& indexMin, int& indexMax)
 {
+	
 }
 
 
