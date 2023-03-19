@@ -45,8 +45,7 @@ struct SearchTreeNode
         // right child +1 for itself. If there is no child, return
         // just 1
         if (this->left == nullptr && this->right == nullptr) return 1;
-        else if (this->left != nullptr) return 1+this->left.height();
-        else if (this->right != nullptr) return 1+this->right.height();
+        else if (this->left != nullptr || this->right != nullptr) return 1+max(this->left.height(), this->right.height());
     }
 
 	int nodesCount() const {
@@ -54,8 +53,8 @@ struct SearchTreeNode
         // right child +1 for itself. If there is no child, return
         // just 1
         if (this->left == nullptr && this->right == nullptr) return 1;
-        else if (this->left != nullptr) return 1+this->left.nodesCount();
-        else if (this->right != nullptr) return 1+this->right.nodesCount();
+        if (this->left != nullptr) return 1+this->left.nodesCount();
+        if (this->right != nullptr) return 1+this->right.nodesCount();
 	}
 
 	bool isLeaf() const {
@@ -63,25 +62,38 @@ struct SearchTreeNode
 	}
 
 	void allLeaves(SearchTreeNode* leaves[], uint& leavesCount) {
-         if(this->isLeaf()){
+        if(this->isLeaf()){
             leaves[leavesCount] = this;
             leavesCount++;
         }
-        else if (this->left != nullptr) this->left->allLeaves(leaves, leavesCount);
-        else if (this->right != nullptr) this->right->allLeaves(leaves, leavesCount);
+        else{
+            if (this->left != nullptr) this->left->allLeaves(leaves, leavesCount);
+            if (this->right != nullptr) this->right->allLeaves(leaves, leavesCount);
+        }
 	}
 
 	void inorderTravel(SearchTreeNode* nodes[], uint& nodesCount) {
         // fill nodes array with all nodes with inorder travel
-        
+        if (this->left != nullptr) this->left->inorderTravel(nodes, nodesCount);
+        nodes[nodesCount] = this;
+        nodesCount++;
+        if (this->right != nullptr) this->right->inorderTravel(nodes, nodesCount);
 	}
 
 	void preorderTravel(SearchTreeNode* nodes[], uint& nodesCount) {
         // fill nodes array with all nodes with preorder travel
+        nodes[nodesCount] = this;
+        nodesCount++;
+        if (this->left != nullptr) this->left->preorderTravel(nodes, nodesCount);
+        if (this->right != nullptr) this->right->preorderTravel(nodes, nodesCount);
 	}
 
 	void postorderTravel(SearchTreeNode* nodes[], uint& nodesCount) {
         // fill nodes array with all nodes with postorder travel
+        if (this->left != nullptr) this->left->postorderTravel(nodes, nodesCount);
+        if (this->right != nullptr) this->right->postorderTravel(nodes, nodesCount);
+        nodes[nodesCount] = this;
+        nodesCount++;
 	}
 
 	SearchTreeNode* find(int value) {
