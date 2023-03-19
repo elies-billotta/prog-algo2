@@ -35,9 +35,9 @@ void printArray(int array[], int size){
 }
 
 int* allEvens(int evens[], int array[], int evenSize, int arraySize){
-    if (arraySize == -1) return evens;
-    if (array[arraySize]%2 == 0){
-        evens[evenSize] = array[arraySize];
+    if (arraySize == 0) return evens;
+    if (array[arraySize-1]%2 == 0){
+        evens[evenSize-1] = array[arraySize-1];
         return allEvens(evens, array, evenSize-1, arraySize-1);
     }
     return allEvens(evens, array, evenSize, arraySize-1);
