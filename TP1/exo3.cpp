@@ -29,14 +29,14 @@ int main(int argc, char *argv[])
 using namespace std;
 
 int search(int value, int toSort[], int size){
-    if (size == -1) return -1;
-    if(toSort[size] == value) return size;
+    if (size == 0) return -1;
+    if(toSort[size-1] == value) return size-1;
     return search(value, toSort, size-1);
 }
 
 int main(){
     int toSort[] = {1, 2, 3, 4, 5};
-    cout << search(3, toSort, 4) << endl;
-    cout << search(13, toSort, 4) << endl;
+    cout << search(1, toSort, 5) << endl;
+    cout << search(13, toSort, 5) << endl;
     return 0;
 }
