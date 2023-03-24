@@ -1,84 +1,80 @@
-#include <time.h>
-#include <stdio.h>
-
-#include <QApplication>
-#include <QDebug>
-
-#include "tp3.h"
-#include "tp4.h"
-#include "tp4_exo2.h"
 #include "HuffmanNode.h"
 
-_TestMainWindow* w1 = nullptr;
 using std::size_t;
 using std::string;
 
-void processCharFrequences(string data, Array& frequences);
-void buildHuffmanHeap(const Array& frequences, HuffmanHeap& priorityMinHeap, int& heapSize);
-HuffmanNode* makeHuffmanSubTree(HuffmanNode* rightNode, HuffmanNode* leftNode);
-HuffmanNode* buildHuffmanTree(HuffmanHeap& priorityMinHeap, int heapSize);
+#include <vector>
 
+void processCharFrequences(string data, std::vector<int>& frequences);
+void buildHuffmanHeap(const std::vector<int>& frequences, std::vector<HuffmanNode*>& priorityMinHeap, int& heapSize);
+HuffmanNode* makeHuffmanSubTree(HuffmanNode* rightNode, HuffmanNode* leftNode);
+HuffmanNode* buildHuffmanTree(std::vector<HuffmanNode*>& priorityMinHeap, int heapSize);
+void insertHeapNode(std::vector<HuffmanNode*> heap, int heapSize, HuffmanNode* newNode);
 string huffmanEncode(const string& toEncode, HuffmanNode* huffmanTree);
 string huffmanDecode(const string& toDecode, const HuffmanNode& huffmanTreeRoot);
 
 
 void main_function(HuffmanNode*& huffmanTree)
 {
-    string data = "Wesh, bien ou quoi ? t'habites dans le coin ou quoi ?
-    J't'ai vue passer dans l'allée, ton boule me rend romantique, pièce";
+    string data = "Wesh, bien ou quoi ? t'habites dans le coin ou quoi ? J't'ai vue passer dans l'allée, ton boule me rend romantique, pièce";
 
     // this array store each caracter frequences indexed by their ascii code
-    Array characterFrequences(256);
-    characterFrequences.fill(0);
+    std::vector<int> characterFrequences;
+    for (int i = 0 ; i < 256 ; i++){
+        characterFrequences.push_back(0);
+    }
+
     // this array store each caracter code indexed by their ascii code
     string characterCodes[256];
-    HuffmanHeap priorityMinHeap;
+    std::vector<HuffmanNode*> priorityMinHeap;
     int heapSize = 0;
 
     processCharFrequences(data, characterFrequences);
-    displayCharacterFrequences(characterFrequences);
+    // afficher characterFrequences
     buildHuffmanHeap(characterFrequences, priorityMinHeap, heapSize);
-    qDebug() << priorityMinHeap.toString().toStdString().c_str();
+    
+    // afficher le heap
 
     huffmanTree = buildHuffmanTree(priorityMinHeap, heapSize);
     huffmanTree->processCodes("");
     string encoded = huffmanEncode(data, huffmanTree);
     string decoded = huffmanDecode(encoded, *huffmanTree);
 
-    qDebug("Encoded: %s\n", encoded.c_str());
-    qDebug("Decoded: %s\n", decoded.c_str());
+    printf("Encoded: %s\n", encoded.c_str());
+    printf("Decoded: %s\n", decoded.c_str());
 }
 
 
-void processCharFrequences(string data, Array& frequences)
+void processCharFrequences(string data, std::vector<int>& frequences)
 {
     /**
       * Fill `frequences` array with each caracter frequence.
       * frequences is an array of 256 int. frequences[i]
       * is the frequence of the caracter with ASCII code i
      **/
-
-    // Your code
-    frequences.fill(0);
+    for(int i = 0 ; i < data.size() ; i++){
+        int ascii = (int) data[i]; 
+        frequences[ascii] +=1;
+    }
 }
 
-void HuffmanHeap::insertHeapNode(int heapSize, HuffmanNode* newNode)
+void insertHeapNode(std::vector<HuffmanNode*> heap, int heapSize, HuffmanNode* newNode)
 {
     /**
       * Insert a HuffmanNode into the lower heap. A min-heap put the lowest value
       * as the first cell, so check the parent should be lower than children.
-      * Instead of storing int, the cells of HuffmanHeap store HuffmanNode*.
+      * Instead of storing int, the cells of std::vector<HuffmanNode*> store HuffmanNode*.
       * To compare these nodes use their frequences.
       * this->get(i): HuffmanNode*  <-> this->get(i)->frequences
       * you can use `this->swap(firstIndex, secondIndex)`
      **/
 
-    // Your code
     int i = heapSize;
+    
 
 }
 
-void buildHuffmanHeap(const Array& frequences, HuffmanHeap& priorityMinHeap, int& heapSize)
+void buildHuffmanHeap(const std::vector<int>& frequences, std::vector<HuffmanNode*>& priorityMinHeap, int& heapSize)
 {
     /**
       * Do like Heap::buildHeap. Use only non-null frequences
@@ -91,7 +87,7 @@ void buildHuffmanHeap(const Array& frequences, HuffmanHeap& priorityMinHeap, int
 
 }
 
-void HuffmanHeap::heapify(int heapSize, int nodeIndex)
+void heapify(std::vector<HuffmanNode*> HuffmanNod, int heapSize, int nodeIndex)
 {
     /**
       * Repair the heap starting from nodeIndex. this is a min-heap,
@@ -104,7 +100,7 @@ void HuffmanHeap::heapify(int heapSize, int nodeIndex)
 }
 
 
-HuffmanNode* HuffmanHeap::extractMinNode(int heapSize)
+HuffmanNode* extractMinNode(std::vector<HuffmanNode*> HuffmanNode, int heapSize)
 {
     /**
       * Extract the first cell, replace the first cell with the last one and
@@ -127,7 +123,7 @@ HuffmanNode* makeHuffmanSubTree(HuffmanNode* rightNode, HuffmanNode* leftNode)
     return new HuffmanNode('\0');
 }
 
-HuffmanNode* buildHuffmanTree(HuffmanHeap& priorityMinHeap, int heapSize)
+HuffmanNode* buildHuffmanTree(std::vector<HuffmanNode*>& priorityMinHeap, int heapSize)
 {
     /**
       * Build Huffman Tree from the priorityMinHeap, pick nodes from the heap until having
@@ -202,9 +198,6 @@ string huffmanDecode(const string& toDecode, const HuffmanNode& huffmanTreeRoot)
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    Array::wait_for_operations = false;
-    w1 = new HuffmanMainWindow(main_function);
-    w1->show();
-    return a.exec();
+    HuffmanNode* root; 
+    main_function(root);
 }
