@@ -24,7 +24,8 @@ string huffmanDecode(const string& toDecode, const HuffmanNode& huffmanTreeRoot)
 
 void main_function(HuffmanNode*& huffmanTree)
 {
-    string data = "Ouesh, bien ou bien ? Ceci est une chaine de caracteres sans grand interet";
+    string data = "Wesh, bien ou quoi ? t'habites dans le coin ou quoi ?
+    J't'ai vue passer dans l'allée, ton boule me rend romantique, pièce";
 
     // this array store each caracter frequences indexed by their ascii code
     Array characterFrequences(256);

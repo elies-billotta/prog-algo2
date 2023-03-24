@@ -96,17 +96,22 @@ struct Heap{
 
 	}
 
-	void Heap::buildHeap(std::vector<int> array, int numbers)
+	void Heap::buildHeap(std::vector<int> numbers)
 	{
-
+		for(int i = 0 ; i< numbers.size() ; i++){
+			heapify(data.size(), numbers[i]);
+		}
 	}
 
 	void Heap::heapSort()
 	{
-
+		for (int i = data.size()-1; i != 0 ; i--){
+			int temp = data[i];
+			data[i] = data[0];
+			data[0] = temp;
+			heapify(i, 0);
+		}
 	}
-
-
 };
 
 int main(){
