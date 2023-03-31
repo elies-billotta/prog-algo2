@@ -53,7 +53,7 @@ struct MapNode
      * @param node
      */
     void insertNode(MapNode* node)
-    {
+    {/*
         if (value < this->value && this->left == nullptr){
             this->left = new    (node);
         }
@@ -63,7 +63,7 @@ struct MapNode
         else if (value > this->left->value){
             this->right->insertNode(node);
         }
-        else this->left->insertNode(node);
+        else this->left->insertNode(node);*/
     }
 
     void insertNode(string key, int value)
