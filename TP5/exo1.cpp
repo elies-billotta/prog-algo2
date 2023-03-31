@@ -1,11 +1,8 @@
-#include <tp5.h>
-#include <QApplication>
 #include <time.h>
+#include <vector>
+#include <string>
 
-MainWindow* w = nullptr;
-
-
-std::vector<string> TP5::names(
+std::vector<std::string> names(
 {
     "Yolo", "Anastasiya", "Clement", "Sirine", "Julien", "Sacha", "Leo", "Margot",
     "JoLeClodo", "Anais", "Jolan", "Marie", "Cindy", "Flavien", "Tanguy", "Audrey",
@@ -15,15 +12,15 @@ std::vector<string> TP5::names(
 });
 
 
-int HashTable::hash(std::string element)
+int hash(std::vector<std::string> hash_table, std::string element)
 {
-    // use this->size() to get HashTable size
-    return 0;
+    return (int) element[0] % hash_table.size();
 }
 
-void HashTable::insert(std::string element)
+void insert(std::vector<std::string> hash_table, std::string element)
 {
     // use (*this)[i] or this->get(i) to get a value at index i
+    hash_table[hash(hash_table, element)] = element;
 }
 
 /**
@@ -32,24 +29,20 @@ void HashTable::insert(std::string element)
  * @param names array of names to insert
  * @param namesCount size of names array
  */
-void buildHashTable(HashTable& table, std::string* names, int namesCount)
+void buildHashTable(std::vector<std::string> hash_table, std::string* names, int namesCount)
 {
-
+    for (int i = 0 ; i < namesCount ; i++){
+        insert(hash_table, names[i]);
+    }
 }
 
-bool HashTable::contains(std::string element)
+bool contains(std::vector<std::string> hash_table, std::string element)
 {
-    // Note: Do not use iteration (for, while, ...)
-    return false;
+    return hash_table[hash(hash_table, element)] == element;
 }
 
 
 int main(int argc, char *argv[])
 {
-	QApplication a(argc, argv);
-	MainWindow::instruction_duration = 10;
-	w = new HashWindow();
-	w->show();
-
-	return a.exec();
+    //table.resize(10);
 }
