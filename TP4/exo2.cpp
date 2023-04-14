@@ -71,6 +71,7 @@ void insertHeapNode(std::vector<HuffmanNode*> heap, int heapSize, HuffmanNode* n
 
     int i = heapSize;
     
+    
 
 }
 

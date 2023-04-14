@@ -1,8 +1,6 @@
-#include "tp6.h"
-#include <QApplication>
 #include <time.h>
+#include "../lib/graph.h"
 
-MainWindow* w = nullptr;
 
 void Graph::buildFromAdjenciesMatrix(int **adjacencies, int nodeCount)
 {
@@ -12,6 +10,16 @@ void Graph::buildFromAdjenciesMatrix(int **adjacencies, int nodeCount)
 	  * this->appendNewNode
 	  * this->nodes[i]->appendNewEdge
 	  */
+	 for (int i = 0 ; i < nodeCount ; i++ ){
+		this->appendNewNode(new GraphNode(i));
+	 }
+	 for (int i = 0 ; i < nodeCount ; i++){
+		for (int j = 0 ; j < nodeCount ; j++){
+			if (adjacencies[i][j] != 0){
+				this->nodes[i]->appendNewEdge(this->nodes[j], adjacencies[i][j]);
+			}
+		}
+	 }
 }
 
 void Graph::deepTravel(GraphNode *first, GraphNode *nodes[], int &nodesSize, bool visited[])
@@ -19,7 +27,14 @@ void Graph::deepTravel(GraphNode *first, GraphNode *nodes[], int &nodesSize, boo
 	/**
 	  * Fill nodes array by travelling graph starting from first and using recursivity
 	  */
-
+	visited[first->value] = true;
+	for (Edge *e = first->edges ; e != NULL ; e = e->next){
+		if (!visited[e->destination->value]){
+			nodes[nodesSize] = e->destination;
+			nodesSize++;
+			deepTravel(e->destination, nodes, nodesSize, visited);
+		}
+	}
 }
 
 void Graph::wideTravel(GraphNode *first, GraphNode *nodes[], int &nodesSize, bool visited[])
@@ -33,6 +48,19 @@ void Graph::wideTravel(GraphNode *first, GraphNode *nodes[], int &nodesSize, boo
 	 */
 	std::queue<GraphNode*> nodeQueue;
 	nodeQueue.push(first);
+	while(!nodeQueue.empty()){
+		GraphNode* v = nodeQueue.front();
+		nodeQueue.pop();
+		visited[v->value] = true;
+		nodes[nodesSize] = v;
+		nodesSize++;
+		for (Edge *e = v->edges ; e != NULL ; e = e->next){
+			if (!visited[e->destination->value]){
+				nodeQueue.push(e->destination);
+			}
+	}
+	}
+
 }
 
 bool Graph::detectCycle(GraphNode *first, bool visited[])
@@ -42,15 +70,24 @@ bool Graph::detectCycle(GraphNode *first, bool visited[])
 	  (the first may not be in the cycle)
 	  Think about what's happen when you get an already visited node
 	**/
+	
     return false;
 }
 
 int main(int argc, char *argv[])
 {
-	QApplication a(argc, argv);
-	MainWindow::instruction_duration = 150;
-	w = new GraphWindow();
-	w->show();
+	int n=7;
+    int** matrix = new int*[n];
+    for (int i=0; i<n; ++i)
+	{
+        matrix[i] = new int[n];
+        for (int j=0; j<n; ++j)
+		{
+			matrix[i][j] = (rand() % 300 - 230) / 2;
+			if (matrix[i][j] < 0)
+				matrix[i][j] = 0;
+		}
+	}
 
-	return a.exec();
+	return 0;
 }
