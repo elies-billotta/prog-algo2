@@ -70,9 +70,14 @@ void insertHeapNode(std::vector<HuffmanNode*> heap, int heapSize, HuffmanNode* n
      **/
 
     int i = heapSize;
-    
-    
-
+    heap.push_back(newNode);
+    heapSize +=1;
+    while(i>0 && heap[i]->frequences < heap[(i-1)/2]->frequences){
+        HuffmanNode* temp = heap[i];
+        heap[i] = heap[(i-1)/2];
+        heap[(i-1)/2] = temp;
+        i = (i-1)/2;
+    }
 }
 
 void buildHuffmanHeap(const std::vector<int>& frequences, std::vector<HuffmanNode*>& priorityMinHeap, int& heapSize)
@@ -82,10 +87,14 @@ void buildHuffmanHeap(const std::vector<int>& frequences, std::vector<HuffmanNod
       * Define heapSize as numbers of inserted nodes
       * allocate a HuffmanNode with `new`
      **/
-
-    // Your code
     heapSize = 0;
-
+    for(int i = 0 ; i < frequences.size() ; i++){
+        if(frequences[i] != 0){
+            HuffmanNode* node = new HuffmanNode((char) i, frequences[i]);
+            insertHeapNode(priorityMinHeap, heapSize, node);
+            heapSize ++;
+        }
+    }
 }
 
 void heapify(std::vector<HuffmanNode*> HuffmanNod, int heapSize, int nodeIndex)
@@ -94,22 +103,36 @@ void heapify(std::vector<HuffmanNode*> HuffmanNod, int heapSize, int nodeIndex)
       * Repair the heap starting from nodeIndex. this is a min-heap,
       * so check the parent should be lower than children.
       * this->get(i): HuffmanNode*  <-> this->get(i)->frequences
-      * you can use `this->swap(firstIndex, secondIndex)`
-     **/
-    // Your code
-
+      * you can use `this->swap(firstIndex, secondIndex)`*/
+    int left = 2*nodeIndex + 1;
+    int right = 2*nodeIndex + 2;
+    int smallest = nodeIndex;
+    if(left < heapSize && HuffmanNod[left]->frequences < HuffmanNod[smallest]->frequences){
+        smallest = left;
+    }
+    if(right < heapSize && HuffmanNod[right]->frequences < HuffmanNod[smallest]->frequences){
+        smallest = right;
+    }
+    if(smallest != nodeIndex){
+        HuffmanNode* temp = HuffmanNod[nodeIndex];
+        HuffmanNod[nodeIndex] = HuffmanNod[smallest];
+        HuffmanNod[smallest] = temp;
+        heapify(HuffmanNod, heapSize, smallest);
+    }
 }
 
 
-HuffmanNode* extractMinNode(std::vector<HuffmanNode*> HuffmanNode, int heapSize)
+HuffmanNode* extractMinNode(std::vector<HuffmanNode*> HuffmanNodes, int heapSize)
 {
     /**
       * Extract the first cell, replace the first cell with the last one and
       * heapify the heap to get a new well-formed heap without the returned cell
-      * you can use `this->swap`
-     **/
-
-    // Your code
+      * you can use `this->swap`**/
+    HuffmanNode* minimum = HuffmanNodes[0];
+    HuffmanNodes[0] = HuffmanNodes[heapSize-1];
+    heapSize -=1;
+    heapify(HuffmanNodes, heapSize, 0);
+    return minimum;    
 }
 
 HuffmanNode* makeHuffmanSubTree(HuffmanNode* rightNode, HuffmanNode* leftNode)
@@ -118,10 +141,12 @@ HuffmanNode* makeHuffmanSubTree(HuffmanNode* rightNode, HuffmanNode* leftNode)
      * Make a subtree (parent + 2 children) with the given 2 nodes.
      * These 2 characters will be the children of a new parent node which character is '\0'
      * and frequence is the sum of the 2 children frequences
-     * Return the new HuffmanNode* parent
-     **/
-    // Your code
-    return new HuffmanNode('\0');
+     * Return the new HuffmanNode* parent*/
+
+    HuffmanNode* parent = new HuffmanNode('\0', rightNode->frequences + leftNode->frequences);
+    parent->left = leftNode;
+    parent->right = rightNode;
+    return parent;
 }
 
 HuffmanNode* buildHuffmanTree(std::vector<HuffmanNode*>& priorityMinHeap, int heapSize)
@@ -130,11 +155,17 @@ HuffmanNode* buildHuffmanTree(std::vector<HuffmanNode*>& priorityMinHeap, int he
       * Build Huffman Tree from the priorityMinHeap, pick nodes from the heap until having
       * one node in the heap. For every 2 min nodes, create a subtree and put the new parent
       * into the heap. The last node of the heap is the HuffmanTree;
-      * use extractMinNode()
-     **/
-
-    // Your code
-    return new HuffmanNode('?');
+      * use extractMinNode()*/
+    while(heapSize > 1){
+        HuffmanNode* left = extractMinNode(priorityMinHeap, heapSize);
+        heapSize -=1;
+        HuffmanNode* right = extractMinNode(priorityMinHeap, heapSize);
+        heapSize -=1;
+        HuffmanNode* parent = makeHuffmanSubTree(right, left);
+        insertHeapNode(priorityMinHeap, heapSize, parent);
+        heapSize +=1;
+    }
+    return priorityMinHeap[0];
 }
 
 void HuffmanNode::processCodes(const std::string& baseCode)
@@ -144,11 +175,17 @@ void HuffmanNode::processCodes(const std::string& baseCode)
       * leaf/character.
       * Each time you call the left child, add '0' to the baseCode
       * and each time call the right child, add '1'.
-      * If the node is a leaf, it takes the baseCode.
-     **/
-
-    // Your code
+      * If the node is a leaf, it takes the baseCode.*/
+    if(this->left){
+        this->left->code = baseCode + "0";
+        this->left->processCodes(this->left->code);
+    }
+    if(this->right){
+        this->right->code = baseCode + "1";
+        this->right->processCodes(this->right->code);
+    }
 }
+
 
 void HuffmanNode::fillCharactersArray(std::string charactersCodes[])
 {
