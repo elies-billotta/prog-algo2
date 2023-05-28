@@ -86,6 +86,12 @@ struct Map
      */
     void insert(string key, int value)
     {
+        if (this->root == nullptr){
+            this->root = new MapNode(key, value);
+        }
+        else {
+            this->root->insertNode(key, value);
+        }
 
     }
 
@@ -96,6 +102,18 @@ struct Map
      */
     int get(string key)
     {
+        MapNode* node = this->root;
+        while (node != nullptr){
+            if (node->key == key){
+                return node->value;
+            }
+            else if (node->key_hash < hash(key)){
+                node = node->right;
+            }
+            else {
+                node = node->left;
+            }
+        }
         return -1;
     }
 
